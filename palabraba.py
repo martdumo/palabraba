@@ -1,8 +1,13 @@
 import os
 import random
+import sys
 import textwrap
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
+
+# Configurar UTF-8 para stdout en Windows
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8')
 
 # 🎨 Graphic Design Automator: Lista de 50 colores "aesthetic" (Pasteles, Muted, Vaporwave, Tierra, etc.)
 AESTHETIC_COLORS =[
