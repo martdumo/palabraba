@@ -167,7 +167,7 @@ ARRAY2_OBJETO = [
     "el programa classico de los 90s, Video Match, pero dirigida por",
     "la escencia del ramal tigre del colectivo 60 hecha y refinada por",
     "una bola de mugre en la que estaba viviendo",
-    "Al perro del vecino afanandole un pan de la bolsa a",
+    "el perro del vecino afanandole un pan de la bolsa a",
     "un video de youtube sobre como hacer estofado de lengejas con",
     "un tractor en miniatura manejado por",
     "toda una la linea ferroviaria del tren Mitre exprimida por"
@@ -193,7 +193,7 @@ ARRAY3_SUJETO = [
     "el payaso mas feo del Cirque du Soleil",
     "el sim que vino a fajarte por sacarle la escalera de la piscina",
     "Ace Ventura manejando mientras saca la sabiola por la ventanilla",
-    "Arnold Schwarzenegger haciendo campaña por Ruakuff",
+    "Arnold Schwarzenegger haciendo campaña por Rukauff",
     "Yoda haciendose una sopita knorr en el estacionamiento del DOT",
     "Carlos menem manejando el evangelion de asuka despues de robarselo y culpar  a los chinos",
     "Frondizi viajando en el tiempo para cumplir su sueño de vender saumerios",
@@ -211,6 +211,40 @@ def get_text_color(hex_color):
     r, g, b = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
     luminancia = 0.299 * r + 0.587 * g + 0.114 * b
     return "#000000" if luminancia > 140 else "#FFFFFF"
+
+# 🎨 Mezclar dos colores de la paleta
+def mix_colors(color1, color2, ratio=0.5):
+    """Mezcla dos colores hex con un ratio dado (0-1)."""
+    c1 = color1.lstrip('#')
+    c2 = color2.lstrip('#')
+    r1, g1, b1 = tuple(int(c1[i:i+2], 16) for i in (0, 2, 4))
+    r2, g2, b2 = tuple(int(c2[i:i+2], 16) for i in (0, 2, 4))
+    r = int(r1 * (1 - ratio) + r2 * ratio)
+    g = int(g1 * (1 - ratio) + g2 * ratio)
+    b = int(b1 * (1 - ratio) + b2 * ratio)
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+# 🎲 Agregar efecto noise al fondo
+def add_noise(image, noise_color_hex, intensity=15):
+    """Agrega un efecto noise sutil a la imagen usando un color de la paleta."""
+    noise_color = noise_color_hex.lstrip('#')
+    r_n, g_n, b_n = tuple(int(noise_color[i:i+2], 16) for i in (0, 2, 4))
+    
+    pixels = image.load()
+    width, height = image.size
+    
+    for y in range(height):
+        for x in range(width):
+            if random.random() < 0.08:  # 8% de probabilidad de noise por pixel
+                r_orig, g_orig, b_orig = pixels[x, y]
+                # Mezclar pixel original con color de noise
+                blend = random.uniform(0.1, 0.3)
+                r_new = int(r_orig * (1 - blend) + r_n * blend)
+                g_new = int(g_orig * (1 - blend) + g_n * blend)
+                b_new = int(b_orig * (1 - blend) + b_n * blend)
+                pixels[x, y] = (r_new, g_new, b_new)
+    
+    return image
 
 # 🏗️ Software Architect: Obtener fuente del sistema
 def get_random_font():
@@ -243,13 +277,18 @@ def generar_frase():
     parte3 = random.choice(ARRAY3_SUJETO)
     return f"{parte1} {parte2} {parte3}."
 
-def crear_imagen(frase, bg_color):
+def crear_imagen(frase, bg_color, noise_color=None):
     """Crea una imagen con la frase y el color de fondo especificado."""
     text_color = get_text_color(bg_color)
 
     # 2. Configuración de lienzo (1500 x 1500)
     width, height = 1500, 1500
     img = Image.new("RGB", (width, height), bg_color)
+    
+    # Agregar efecto noise si se proporciona un color
+    if noise_color:
+        img = add_noise(img, noise_color)
+    
     draw = ImageDraw.Draw(img)
 
     # 3. Configuración de tipografía
@@ -299,7 +338,7 @@ def crear_imagen(frase, bg_color):
     filename = f"frase_{timestamp}.png"
 
     img.save(filename, quality=100)
-    return filename, bg_color, font_path
+    return filename, bg_color, font_path, noise_color
 
 def main():
     print("✨ Generador de Frases Aleatorias ✨\n")
@@ -314,15 +353,25 @@ def main():
         print("  1. Imprimir la frase en una imagen")
         print("  2. Generar otra frase")
         print("  3. Salir")
+        print("  4. Imprimir frase personalizada")
 
         opcion = input("\nOpción: ").strip()
 
         if opcion == "1":
-            # Elegir color aleatorio y crear imagen
-            bg_color = random.choice(AESTHETIC_COLORS)
-            filename, color, font_path = crear_imagen(frase, bg_color)
+            # Mezclar dos colores aleatorios de la paleta para el fondo
+            color1 = random.choice(AESTHETIC_COLORS)
+            color2 = random.choice(AESTHETIC_COLORS)
+            ratio = random.uniform(0.3, 0.7)  # Ratio aleatorio para la mezcla
+            bg_color = mix_colors(color1, color2, ratio)
+            
+            # Elegir otro color para el efecto noise
+            noise_color = random.choice(AESTHETIC_COLORS)
+            
+            filename, color, font_path, noise = crear_imagen(frase, bg_color, noise_color)
             print(f"\n✅ ¡Imagen creada con éxito! Guardada como: {filename}")
-            print(f"🎨 Color elegido: {color}")
+            print(f"🎨 Colores mezclados: {color1} + {color2} (ratio: {ratio:.2f})")
+            print(f"🎨 Color de fondo resultante: {color}")
+            print(f"✨ Color de noise: {noise}")
             print(f"🔤 Tipografía usada: {os.path.basename(font_path) if font_path else 'Default'}\n")
             break
         elif opcion == "2":
@@ -331,6 +380,29 @@ def main():
         elif opcion == "3":
             print("\n👋 ¡Hasta luego!")
             break
+        elif opcion == "4":
+            # Opción para frase personalizada
+            print("\n✍️  Ingresa tu frase personalizada:")
+            frase_personalizada = input("> ").strip()
+            
+            if frase_personalizada:
+                # Mezclar dos colores aleatorios de la paleta para el fondo
+                color1 = random.choice(AESTHETIC_COLORS)
+                color2 = random.choice(AESTHETIC_COLORS)
+                ratio = random.uniform(0.3, 0.7)
+                bg_color = mix_colors(color1, color2, ratio)
+                
+                # Elegir otro color para el efecto noise
+                noise_color = random.choice(AESTHETIC_COLORS)
+                
+                filename, color, font_path, noise = crear_imagen(frase_personalizada, bg_color, noise_color)
+                print(f"\n✅ ¡Imagen creada con éxito! Guardada como: {filename}")
+                print(f"🎨 Colores mezclados: {color1} + {color2} (ratio: {ratio:.2f})")
+                print(f"🎨 Color de fondo resultante: {color}")
+                print(f"✨ Color de noise: {noise}")
+                print(f"🔤 Tipografía usada: {os.path.basename(font_path) if font_path else 'Default'}\n")
+            else:
+                print("\n❌ Frase vacía. Inténtalo de nuevo.\n")
         else:
             print("\n❌ Opción no válida. Intenta de nuevo.\n")
 
