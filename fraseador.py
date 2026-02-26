@@ -160,7 +160,17 @@ ARRAY2_OBJETO = [
     "un helado de salame mal servido a",
     "la boleta de luz de",
     "un refresco con sabor a",
-    "las uñas de"
+    "las uñas de",
+    "una escultura de caca hecha por",
+    "la causa de violencia intrafamiliar entre Mickey Mouse y",
+    "una escena abstracta dirigida por David Lynch sobre",
+    "el programa classico de los 90s, Video Match, pero dirigida por",
+    "la escencia del ramal tigre del colectivo 60 hecha y refinada por",
+    "una bola de mugre en la que estaba viviendo",
+    "Al perro del vecino afanandole un pan de la bolsa a",
+    "un video de youtube sobre como hacer estofado de lengejas con",
+    "un tractor en miniatura manejado por",
+    "toda una la linea ferroviaria del tren Mitre exprimida por"
 ]
 
 ARRAY3_SUJETO = [
@@ -181,7 +191,18 @@ ARRAY3_SUJETO = [
     "Don Ramon enojado",
     "un mimo con una bicicleta en el ogt",
     "el payaso mas feo del Cirque du Soleil",
-    "el sim que vino a fajarte por sacarle la escalera de la piscina"
+    "el sim que vino a fajarte por sacarle la escalera de la piscina",
+    "Ace Ventura manejando mientras saca la sabiola por la ventanilla",
+    "Arnold Schwarzenegger haciendo campaña por Ruakuff",
+    "Yoda haciendose una sopita knorr en el estacionamiento del DOT",
+    "Carlos menem manejando el evangelion de asuka despues de robarselo y culpar  a los chinos",
+    "Frondizi viajando en el tiempo para cumplir su sueño de vender saumerios",
+    "Lopez Rega jugando a la UIJA con un salame a medio cortar",
+    "Fito paez audienciando para trabajar en la octava temporada de Stranger Things",
+    "el desodorante que habito a Marcelo Tinelli",
+    "Johnny Bravo haciendose pasar por un crypto bro en el cumple de tu prima Juana",
+    "Scooby Doo bajoneandose unas pitusas de limon con un fernandito",
+    "Riquelme nervioso despues de que se le paso la mano armando el fuego para el asado"
 ]
 
 # 🐍 Python Developer: Función para calcular contraste
